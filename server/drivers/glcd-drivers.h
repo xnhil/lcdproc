@@ -29,6 +29,12 @@ int glcd_picolcdgfx_init(Driver *drvthis);
 #ifdef HAVE_LIBX11
 int glcd_x11_init(Driver *drvthis);
 #endif
+//#ifdef HAVE_UGPIO
+int glcd_st7920_init(Driver *drvthis);
+//#endif
+//#ifdef HAVE_LIBBV4612
+int glcd_bv4612_init(Driver *drvthis);
+//#endif
 
 /* symbolic names for connection types */
 #define GLCD_CT_UNKNOWN		0
@@ -38,6 +44,8 @@ int glcd_x11_init(Driver *drvthis);
 #define GLCD_CT_GLCD2USB	4
 #define GLCD_CT_X11		5
 #define GLCD_CT_PICOLCDGFX	6
+#define GLCD_CT_ST7920		7
+#define GLCD_CT_BV4612		8
 
 /** Structure linking symbolic names to initialization routines */
 typedef struct ConnectionMapping {
@@ -69,6 +77,12 @@ static const ConnectionMapping connectionMapping[] = {
 #ifdef HAVE_LIBX11
 	{"x11", GLCD_CT_X11, glcd_x11_init},
 #endif
+//#ifdef HAVE_UGPIO
+	{"st7920", GLCD_CT_ST7920, glcd_st7920_init},
+//#endif
+//#ifdef HAVE_LIBBV4612
+	{"bv4612", GLCD_CT_BV4612, glcd_bv4612_init},
+//#endif
 	/* default, end of structure element (do not delete) */
 	{NULL, GLCD_CT_UNKNOWN, NULL}
 };

@@ -181,28 +181,53 @@ dnl			else
 			;;
 		glcd)
 			GLCD_DRIVERS=""
-			if test "$ac_cv_port_have_lpt" = yes ; then
-				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-t6963.o t6963_low.o"
+dnl			if test "$ac_cv_port_have_lpt" = yes ; then
+dnl				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-t6963.o t6963_low.o"
+dnl			fi
+dnl			if test "$enable_libpng" = yes ; then
+dnl				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-png.o"
+dnl			fi
+dnl			if test "$enable_libusb" = yes ; then
+dnl				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-glcd2usb.o glcd-glcd-picolcdgfx.o"
+dnl			fi
+dnl			AC_CHECK_HEADERS([serdisplib/serdisp.h],[
+dnl				AC_CHECK_LIB(serdisp, serdisp_nextdisplaydescription,[
+dnl					AC_DEFINE(HAVE_SERDISPLIB,[1],[Define to 1 if you have working serdisplib])
+dnl					LIBSERDISP="-lserdisp"
+dnl					GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-serdisp.o"
+dnl				],[
+dnl					AC_MSG_WARN([serdisp library not working])
+dnl				])
+dnl			])
+dnl			AC_SUBST(LIBSERDISP)
+dnl			if test "$enable_libX11" = yes ; then
+dnl				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-x11.o"
+dnl			fi
+dnl			AC_CHECK_LIB(ugpio, main,[
+dnl				GLCD_DRIVERS="$GLCD_DRIVERS glcd-st7920.o"
+dnl				LIBUGPIO="-lugpio"
+dnl				AC_DEFINE(HAVE_UGPIO, [1], [Define to 1 if you have libugpio])
+dnl			],[
+dnl				AC_MSG_WARN([Could not find libugpio, not building glcd-st7920 driver])
+dnl			])
+			if test "$x_ac_have_spi" = yes; then
+				GLCD_DRIVERS="$GLCD_DRIVERS glcd-st7920.o"
 			fi
-			if test "$enable_libpng" = yes ; then
-				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-png.o"
-			fi
-			if test "$enable_libusb" = yes ; then
-				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-glcd2usb.o glcd-glcd-picolcdgfx.o"
-			fi
-			AC_CHECK_HEADERS([serdisplib/serdisp.h],[
-				AC_CHECK_LIB(serdisp, serdisp_nextdisplaydescription,[
-					AC_DEFINE(HAVE_SERDISPLIB,[1],[Define to 1 if you have working serdisplib])
-					LIBSERDISP="-lserdisp"
-					GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-serdisp.o"
-				],[
-					AC_MSG_WARN([serdisp library not working])
-				])
-			])
-			AC_SUBST(LIBSERDISP)
-			if test "$enable_libX11" = yes ; then
-				GLCD_DRIVERS="$GLCD_DRIVERS glcd-glcd-x11.o"
-			fi
+dnl			AC_CHECK_HEADERS([bv4612.h],[
+dnl				AC_CHECK_LIB(bv4612, bv4612_join,[
+					AC_DEFINE(HAVE_LIBBV4612,[1],[Define to 1 if you have working bv4612])
+					GLCD_DRIVERS="$GLCD_DRIVERS glcd-bv4612.o"
+					LIBBV4612=""
+dnl				],[
+dnl				else
+dnl					AC_MSG_WARN([The g1cd-bv4612 driver needs the bv4612 library])
+dnl				],
+dnl				[-lbv4612]
+dnl				)
+dnl			],[
+dnl			else
+dnl				AC_MSG_WARN([The g1cd-bv4612 driver needs bv4612.h])
+dnl			])
 			DRIVERS="$DRIVERS glcd${SO}"
 			actdrivers=["$actdrivers glcd"]
 			;;
